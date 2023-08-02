@@ -70,5 +70,5 @@ class MotorImageryDataset:
         m = len(trials[0])
         for i in range(n):
             for j in range(m):
-                trialsByClasses[classes[i][j]].append(np.array(trials[i][j]))
+                trialsByClasses[classes[i][j]][j].append(np.array(trials[i][j]))
         return trialsByClasses

@@ -1,5 +1,5 @@
 from time import time
-import urllib.request
+from urllib import request
 import datetime
 import json
 import sys
@@ -32,7 +32,7 @@ def workingDirectory() -> str:
         currDir = os.path.dirname(os.path.abspath(__file__))
     return currDir
 
-def filesInFolder(dir :str, extention=False) -> [str]:
+def filesInFolder(dir :str, extention=False) -> list[str]:
     if extention:
         return [file.replace(f".{extention}", "") for file in os.listdir(dir) if file.endswith(f".{extention}")]
     else:
@@ -40,7 +40,7 @@ def filesInFolder(dir :str, extention=False) -> [str]:
 
 def download_file(url :str, filename :str) -> None:
     try:
-        urllib.request.urlretrieve(url, filename)
+        request.urlretrieve(url, filename)
         print(f"Downloaded: {filename}")
     except Exception as e:
         print(f"Failed to download {filename}: {e}")
@@ -50,15 +50,15 @@ def log(text :str) -> None:
     with open(f'{currDir}/log.txt', 'a') as file:
         file.write(f"{datetime.datetime.now()} - {text}\n")
 
-def inputType(func :function) -> dict[str, Any]:
+def inputType(func) -> dict:
     return func.__annotations__
 
-def checkTime(func :function, *params):
+def checkTime(func, *params) -> float:
     start = time()
     output = func(*params)
     return (time()-start, output)
 
-def parentDirectory(dir :str, separator :str="\\", n :int=1):
+def parentDirectory(dir :str, separator :str="\\", n :int=1) -> str:
     return separator.join(dir.split(separator)[:-n])
 
 currDir = os.path.dirname(os.path.realpath(__file__))
