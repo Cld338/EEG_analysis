@@ -23,7 +23,7 @@ class MotorImageryDataset:
         self.mi_types = {769: 'left', 770: 'right',
                          771: 'foot', 772: 'tongue', 783: 'unknown'}
 
-    def get_trials_from_channel(self, channel=7):
+    def get_trials_from_channel(self, channel):
 
         # Channel default is C3
 
@@ -51,7 +51,7 @@ class MotorImageryDataset:
 
         return trials, classes
 
-    def get_trials_from_channels(self, channels=[7, 9, 11]):
+    def get_trials_from_channels(self, channels):
         trials_c = []
         classes_c = []
         for c in channels:
@@ -62,13 +62,13 @@ class MotorImageryDataset:
             classes_c.append(c)
 
         return trials_c, classes_c
-    
+
     def get_trials_by_classes(self, channels):
         trials, classes = self.get_trials_from_channels(channels=channels)
-        trialsByClasses = {i:[] for i in self.mi_types.values()}
         n = len(trials)
         m = len(trials[0])
+        trialsByClasses = {i:[[] for _ in range(n)] for i in self.mi_types.values()}
         for i in range(n):
             for j in range(m):
-                trialsByClasses[classes[i][j]][j].append(np.array(trials[i][j]))
+                trialsByClasses[classes[i][j]][i].append(trials[i][j])
         return trialsByClasses
