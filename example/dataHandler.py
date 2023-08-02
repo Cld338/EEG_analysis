@@ -62,20 +62,13 @@ class MotorImageryDataset:
             classes_c.append(c)
 
         return trials_c, classes_c
-
-
-datasetA1 = MotorImageryDataset('./A01T.npz')
-trials, classes = datasetA1.get_trials_from_channels([7, 9, 11])
-
-
-plt.subplot(3, 1, 1)
-plt.imshow(trials[0])
-plt.title('C3', size=22)
-plt.subplot(3, 1, 2)
-plt.imshow(trials[1])
-plt.title('Cz', size=22)
-plt.subplot(3, 1, 3)
-plt.imshow(trials[2])
-plt.title('C4', size=22)
-
-plt.show()
+    
+    def get_trials_by_classes(self, channels):
+        trials, classes = self.get_trials_from_channels(channels=channels)
+        trialsByClasses = {i:[] for i in self.mi_types.values()}
+        n = len(trials)
+        m = len(trials[0])
+        for i in range(n):
+            for j in range(m):
+                trialsByClasses[classes[i][j]].append(np.array(trials[i][j]))
+        return trialsByClasses
