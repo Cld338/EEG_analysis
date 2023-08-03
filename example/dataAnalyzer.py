@@ -21,59 +21,32 @@ def bandpass_filter(data, sample_rate, cutoff_low, cutoff_high):
 # =========================================================================
 
 def covariance(X):
-    cov_data = X@np.transpose(X)
-    covariance_matrix = cov_data/np.trace(cov_data)
+    cov_data = np.dot(X, np.transpose(X))
+    covariance_matrix = cov_data / np.trace(cov_data)
     return covariance_matrix
 
-
 def whitening_transform(matrix):
-    # 고유값 분해를 통해 얻은 혼합 공분산 행렬에 대한 고유값 및 고유 벡터
     Lambda, U = np.linalg.eig(matrix)
-
-    # 고유값과 고유 벡터를 통해 얻은 백색화 변환 행렬
-    Q = np.diag(1/np.sqrt(Lambda))@U.T
-    
+    Q = np.dot(np.linalg.pinv(np.sqrt(np.diag(Lambda))), U.T)
     return Q
 
-
 def CSP_filter(experimentNum, *classes):
-    # https://blog.naver.com/PostView.nhn?isHttpsRedirect=true&blogId=timesea821&logNo=220963603607
-    # 위 블로그 과정을 따라 만들었으니 참고
-
     classNum = len(classes)
-    
-    # 각 class - subject별 covariance matrix가 저장된 array
-    # 나중에 subject를 experiment로 수정해야함
-    # subjet 별 데이터에서 experiments를 구분해야 하는데, 언제까지가 각각의 experiments인지 모름. 찾아볼 것
     classes_covariance_matrix_per_subject = np.array([np.array([covariance(classes[i][j]) for j in range(experimentNum)]) for i in range(classNum)])
-
-    # 각 class별 mean covariance matrix 
     classes_mean_covariance_matrix = np.zeros_like(classes_covariance_matrix_per_subject[0][0])
     for i in range(classNum):
         for j in range(experimentNum):
             classes_mean_covariance_matrix = classes_mean_covariance_matrix + classes_covariance_matrix_per_subject[i][j]
-    classes_mean_covariance_matrix = classes_mean_covariance_matrix/experimentNum
+    classes_mean_covariance_matrix = classes_mean_covariance_matrix / experimentNum
 
-    # 혼합 공분산 행렬 (전체 class의 covariance matrix의 합)
-    sum_covariance_matrix = np.zeros_like(classes_mean_covariance_matrix)
-    for i in range(classNum):
-        sum_covariance_matrix = sum_covariance_matrix + classes_mean_covariance_matrix
-
-    # 백색화 변환 행렬
+    sum_covariance_matrix = np.sum(classes_covariance_matrix_per_subject, axis=(0, 1))
     Q = whitening_transform(sum_covariance_matrix)
-    print(Q.shape)
 
-
-    # 혼합 공분산 행렬의 고유값 및 고유 벡터
     Lambda, U = np.linalg.eig(sum_covariance_matrix)
-
-
-    #고유값을 기준으로 내림차순 정렬된 고유 벡터
     sorted_U = U[:, np.argsort(Lambda)[::-1]]
-    
     csp_filter = np.dot(sorted_U.T, Q)
-    
-    return np.array(csp_filter)
+
+    return csp_filter
 
 # =========================================================================
 
