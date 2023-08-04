@@ -21,7 +21,7 @@ def bandpass_filter(data, sample_rate, cutoff_low, cutoff_high):
 # =========================================================================
 
 def covariance(X):
-    cov_data = np.dot(X, np.transpose(X))
+    cov_data = X@np.transpose(X)
     covariance_matrix = cov_data / np.trace(cov_data)
     return covariance_matrix
 
