@@ -131,14 +131,4 @@ def parentDirectory(dir :str, separator :str="\\", n :int=1) -> str:
     """
     return separator.join(dir.split(separator)[:-n])
 
-def reconstruct(list, structure):
-    """_summary_
-
-    Args:
-        list (_type_): _description_
-        structure (_type_): _description_
-    """
-    return
-
-
 currDir = os.path.dirname(os.path.realpath(__file__))
