@@ -3,6 +3,7 @@ from sklearn.decomposition import PCA
 from scipy.fft import fft, ifft
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 # =========================================================================
 
@@ -65,13 +66,29 @@ class PrincipalComponuntAnalysis():
 # =========================================================================
 
 def LDATransform(data, label, n_components, solver="svd"):
-    # 2개의 클래스로 구분하기 위한 LDA 생성
     lda = LinearDiscriminantAnalysis(n_components=n_components, solver=solver)
-    # fit()호출 시 target값 입력 
+    # fit()호출 시 target값 입력
     lda.fit(data, label)
     transformedData = lda.transform(data)
     return transformedData
 
 # =========================================================================
 
-def 
+def plotDF3D(df, num_of_classes):
+    df.columns = [f"axis{i+1}" for i in range(len(df.columns)-1)]+["label"]
+    # 3D scatter plot 그리기
+    fig = plt.figure()  
+    ax = fig.add_subplot(111, projection='3d')
+
+    # 클래스별로 색상을 다르게 설정
+    colors = ['r', 'g', 'b', 'c']
+    for i in range(num_of_classes):  # 클래스 개수에 맞게 범위 설정
+        subset = df[df['label'] == i]
+        ax.scatter(subset['axis1'], subset['axis2'], subset['axis3'], c=colors[i], label=f'Class {i}', alpha=1)
+
+    ax.set_xlabel('axis 1')
+    ax.set_ylabel('axis 2')
+    ax.set_zlabel('axis 3')
+    ax.set_title('3D Scatter Plot of axises')
+    ax.legend()
+    plt.show()
