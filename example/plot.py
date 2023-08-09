@@ -9,7 +9,7 @@ df = pd.DataFrame(np.load(currDir + "/dataframe.npy"))
 df.columns = [f"principal component{i+1}" for i in range(3)]+["label"]
 
 # 3D scatter plot 그리기
-fig = plt.figure()
+fig = plt.figure()  
 ax = fig.add_subplot(111, projection='3d')
 
 # 클래스별로 색상을 다르게 설정
@@ -24,3 +24,6 @@ ax.set_zlabel('Principal Component 3')
 ax.set_title('3D Scatter Plot of Principal Components')
 ax.legend()
 plt.show()
+# import numpy as np
+# from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+# clf = LinearDiscriminantAnalysis()

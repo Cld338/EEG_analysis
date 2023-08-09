@@ -51,7 +51,7 @@ def CSP_filter(experimentNum, *classes):
 # =========================================================================
 
 
-class PrincipalComponentAnalysis():
+class PrincipalComponuntAnalysis():
     def __init__(self, n_componunts, data):
         self.analyzer = PCA(n_components=n_componunts) # 주성분을 몇개로 할지 결정
         printcipalComponents = self.analyzer.fit_transform(data)
