@@ -64,10 +64,14 @@ class PrincipalComponuntAnalysis():
 
 # =========================================================================
 
-def lda(data, label, n_components, solver="svd"):
+def LDATransform(data, label, n_components, solver="svd"):
     # 2개의 클래스로 구분하기 위한 LDA 생성
     lda = LinearDiscriminantAnalysis(n_components=n_components, solver=solver)
     # fit()호출 시 target값 입력 
     lda.fit(data, label)
     transformedData = lda.transform(data)
     return transformedData
+
+# =========================================================================
+
+def 
