@@ -1,6 +1,4 @@
 import numpy as np
-from matplotlib import pyplot as plt
-
 
 class MotorImageryDataset:
     def __init__(self, dataset='A01T.npz'):
