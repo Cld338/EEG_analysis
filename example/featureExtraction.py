@@ -17,7 +17,7 @@ def twoTimesMDimensionalFeature(data, classIdx :int, channelNum :int, minTrialsN
         np.ndarray: 특징 벡터
     """
     Var = np.array([np.array([np.var(data[i][j]) for j in range(channelNum)]) for i in range(minTrialsNum)])
-    VarRatio = np.array([np.array([log(Var[i][j-m]/sum(Var[i])) for j in range(m*2)]) for i in range(minTrialsNum)])
+    VarRatio = np.array([np.array([log(Var[i][j]/sum(Var[i])) for j in range(m*2)]) for i in range(minTrialsNum)])
     VarRatioDF = pd.DataFrame(VarRatio)
 
     return VarRatioDF

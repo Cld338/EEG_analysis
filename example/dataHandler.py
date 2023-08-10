@@ -1,8 +1,9 @@
 import numpy as np
+from sklearn.model_selection import cross_val_score, cross_validate
 
 class MotorImageryDataset:
     # https://bbci.de/competition/iv/desc_2a.pdf
-    
+
     def __init__(self, dataset='A01T.npz'):
         if not dataset.endswith('.npz'):
             dataset += '.npz'
