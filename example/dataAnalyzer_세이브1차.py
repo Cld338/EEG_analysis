@@ -22,27 +22,32 @@ def bandpass_filter(data, sample_rate, cutoff_low, cutoff_high):
 # =========================================================================
 
 def covariance(X):
-    cov_data = np.dot(X, np.transpose(X))
-    covariance_matrix = cov_data / X.shape[0]
+    cov_data = X@np.transpose(X)
+    covariance_matrix = cov_data / np.trace(cov_data)
     return covariance_matrix
 
 def whitening_transform(matrix):
     Lambda, U = np.linalg.eig(matrix)
-    Lambda[Lambda < 0] = 0
-    Q = np.dot(np.diag(np.sqrt(Lambda)), U.T)
+    Q = np.dot(np.linalg.pinv(np.sqrt(np.diag(Lambda))), U.T)
     return Q
 
-def CSP_filter(class1, class2):
-    covClass1 = np.array([covariance(i) for i in class1])
-    covClass2 = np.array([covariance(i) for i in class2])
-    covMeanClass1 = np.mean(covClass1, axis=0)
-    covMeanClass2 = np.mean(covClass2, axis=0)
-    Q = whitening_transform(covMeanClass1 + covMeanClass2)
-    S1 = np.dot(np.dot(Q, covMeanClass2), Q.T)
-    _, B = np.linalg.eig(S1)
-    W = np.dot(Q, B)
-    return W
+def CSP_filter(experimentNum, *classes):
+    classNum = len(classes)
+    classes_covariance_matrix_per_subject = np.array([np.array([covariance(classes[i][j]) for j in range(experimentNum)]) for i in range(classNum)])
+    classes_mean_covariance_matrix = np.zeros_like(classes_covariance_matrix_per_subject[0][0])
+    for i in range(classNum):
+        for j in range(experimentNum):  
+            classes_mean_covariance_matrix = classes_mean_covariance_matrix + classes_covariance_matrix_per_subject[i][j]
+    classes_mean_covariance_matrix = classes_mean_covariance_matrix / experimentNum
 
+    sum_covariance_matrix = np.sum(classes_covariance_matrix_per_subject, axis=(0, 1))
+    Q = whitening_transform(sum_covariance_matrix)
+
+    Lambda, U = np.linalg.eig(sum_covariance_matrix)
+    sorted_U = U[:, np.argsort(Lambda)[::-1]]
+    csp_filter = np.dot(sorted_U.T, Q)
+
+    return csp_filter
 
 # =========================================================================
 
