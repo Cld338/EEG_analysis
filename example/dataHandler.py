@@ -1,6 +1,8 @@
 import numpy as np
 
 class MotorImageryDataset:
+    # https://bbci.de/competition/iv/desc_2a.pdf
+    
     def __init__(self, dataset='A01T.npz'):
         if not dataset.endswith('.npz'):
             dataset += '.npz'
@@ -17,14 +19,10 @@ class MotorImageryDataset:
         self.events_duration = self.data['edur'].T
         self.artifacts = self.data['artifacts'].T
 
-        # Types of motor imagery
         self.mi_types = {769: 'left', 770: 'right',
                          771: 'foot', 772: 'tongue', 783: 'unknown'}
 
     def get_trials_from_channel(self, channel):
-
-        # Channel default is C3
-
         startrial_code = 768
         starttrial_events = self.events_type == startrial_code
         idxs = [i for i, x in enumerate(starttrial_events[0]) if x]
