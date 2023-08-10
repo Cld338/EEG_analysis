@@ -43,9 +43,7 @@ def CSP_filter(class1, class2):
     W = np.dot(Q, B)
     return W
 
-
 # =========================================================================
-
 
 class PrincipalComponuntAnalysis():
     def __init__(self, n_componunts, data):
@@ -54,9 +52,7 @@ class PrincipalComponuntAnalysis():
         self.principalDf = pd.DataFrame(data=printcipalComponents, columns = [f'principal component{i+1}' for i in range(n_componunts)])
 
     def explained_variance_ratio_(self):
-            return self.analyzer.explained_variance_ratio_
-
-
+        return self.analyzer.explained_variance_ratio_
 
 # =========================================================================
 
@@ -87,3 +83,7 @@ def plotDF3D(df, num_of_classes, colors :list=['r', 'g', 'b', 'c']) -> None:
     ax.legend()
     plt.show()
     return
+
+# =========================================================================
+
+# def 
