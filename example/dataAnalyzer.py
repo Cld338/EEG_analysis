@@ -1,9 +1,13 @@
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.model_selection import cross_val_score, cross_validate
 from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
 from scipy.fft import fft, ifft
+import sklearn.svm as svm
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
+
+
 
 # =========================================================================
 
@@ -84,3 +88,9 @@ def plotDF3D(data :pd.DataFrame, num_of_classes :int, colors :list=['r', 'g', 'b
     return
 
 # =========================================================================
+
+def cross_validation(kernel, data, label):
+    # 교차검증
+    svm_clf = svm.SVC(kernel = kernel, random_state=100)
+    scores = cross_val_score(svm_clf, data, label, cv = 5)
+    print('교차검증 평균: ', scores.mean())

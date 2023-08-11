@@ -2,7 +2,7 @@ from math import log
 import numpy as np
 import pandas as pd
 
-def twoTimesMDimensionalFeature(data, classIdx :int, channelNum :int, minTrialsNum :int, m :int=3) -> np.ndarray:
+def twoMDimensionalFeature(data, channelNum :int, minTrialsNum :int, m :int=3) -> np.ndarray:
     # doi.org/10.5626/JOK.2017.44.6.587
     """EEG 신호에 대해 2m 차원 특징 벡터 반환
     
