@@ -8,7 +8,7 @@ from private_tool import *
 from dataHandler import *
 
 warnings.filterwarnings('ignore')
-
+    
 experimentNum = 9
 Experiments = [MotorImageryDataset(parentDirectory(dir=currDir, separator="\\", n=1)+'/bcicompetitionIV2a/A0'+str(i+1)+'T.npz') for i in range(experimentNum)]
 
@@ -152,5 +152,7 @@ for i in range(9):
 
 print(linear_score)
 print(sum(linear_score)/9)
+print(sorted(linear_score)[4])
 print(rbf_score)
 print(sum(rbf_score)/9)
+print(sorted(rbf_score)[4])
