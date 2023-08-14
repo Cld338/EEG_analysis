@@ -17,10 +17,18 @@ def twoMDimensionalFeature(data, channelNum :int, minTrialsNum :int, m :int=3) -
         np.ndarray: 특징 벡터
     """
     Var = np.array([np.array([np.var(data[i][j]) for j in range(channelNum)]) for i in range(minTrialsNum)])
-    VarRatio = np.array([np.array([log(Var[i][j]/sum(Var[i])) for j in range(m*2)]) for i in range(minTrialsNum)])
+    VarRatio = np.array([np.array([log(Var[i][j]/sum(Var[i])) for j in range(2*m)]) for i in range(minTrialsNum)])
     VarRatioDF = pd.DataFrame(VarRatio)
 
     return VarRatioDF
 
 
-# def RMS(data):
+def RMSFeature(data):
+    return np.array([np.array([np.sqrt(sum([k**2 for k in j])/len(i)) for j in i]) for i in data])
+
+def MAVFeature(data):
+    return np.array([np.array([sum([abs(k) for k in j])/len(i) for j in i]) for i in data])
+
+def DAMVFeature(data):
+    return np.array([np.array([sum([abs(j[k+1] - j[k]) for k in range(len(j)-1)])/len(i) for j in i]) for i in data])
+

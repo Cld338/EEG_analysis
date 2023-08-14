@@ -8,8 +8,6 @@ import pandas as pd
 import numpy as np
 import urllib
 
-
-
 # =========================================================================
 
 def bandpass_filter(data, sample_rate, cutoff_low, cutoff_high):
@@ -43,7 +41,7 @@ def CSP_filter(class1, class2):
     covMeanClass1 = np.mean(covClass1, axis=0)
     covMeanClass2 = np.mean(covClass2, axis=0)
     Q = whitening_transform(covMeanClass1 + covMeanClass2)
-    S1 = np.dot(np.dot(Q, covMeanClass2), Q.T)
+    S1 = np.dot(np.dot(Q, covMeanClass2), Q.T) # eigen
     _, B = np.linalg.eig(S1)
     W = np.dot(Q, B)
     return W

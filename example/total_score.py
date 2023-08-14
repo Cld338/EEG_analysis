@@ -20,7 +20,7 @@ for i in range(len(trialsByClasses)):
     for j in trialsByClasses[i].keys():
         for k in range(len(trialsByClasses[i][j])):
             for l in range(len(trialsByClasses[i][j][k])):
-                trialsByClasses[i][j][k][l] = trialsByClasses[i][j][k][l][749:1500]
+                trialsByClasses[i][j][k][l] = trialsByClasses[i][j][k][l][750:1500]
 
 channelNum = len(channels)
 m = len(trialsByClasses[0]["left"])
@@ -30,7 +30,6 @@ m = len(trialsByClasses[0]["left"])
 linear_score = []
 rbf_score = []
 def main(experimentIdx):
-
     bandpassedTrialsByClasses = [{i:[[] for _ in range(channelNum)] for i in j.mi_types.values()} for j in Experiments]
     for k in range(experimentNum):
         for key in trialsByClasses[k].keys():
@@ -49,7 +48,6 @@ def main(experimentIdx):
 
     minTrialsNum = sorted([sorted([len(bandpassedTrialsByClasses["left"][i][0]) for i in range(experimentNum)])[0], sorted([len(bandpassedTrialsByClasses["right"][i][0]) for i in range(experimentNum)])[0], sorted([len(bandpassedTrialsByClasses["tongue"][i][0]) for i in range(experimentNum)])[0], sorted([len(bandpassedTrialsByClasses["foot"][i][0]) for i in range(experimentNum)])[0]])[0]
     bandpassedTrialsByClasses = {i:[bandpassedTrialsByClasses[i][j] for j in range(experimentNum)] for i in Experiments[0].mi_types.values()}
-    minTrialsNum
 
     # experimentIdx = 3
 
@@ -85,19 +83,31 @@ def main(experimentIdx):
     CSP_passed_foot_data = np.array([i.T for i in np.array(CSP_passed_foot_data).T]).T
     CSP_passed_left_data.shape
 
-    m = 12
+    # m = 12
 
-    leftVarRatioDF = twoMDimensionalFeature(CSP_passed_left_data, channelNum, minTrialsNum, m)
-    rightVarRatioDF = twoMDimensionalFeature(CSP_passed_right_data, channelNum, minTrialsNum, m)
-    tongueVarRatioDF = twoMDimensionalFeature(CSP_passed_tongue_data, channelNum, minTrialsNum, m)
-    footVarRatioDF = twoMDimensionalFeature(CSP_passed_foot_data, channelNum, minTrialsNum, m)
+    # leftVarRatioDF = twoMDimensionalFeature(CSP_passed_left_data, channelNum, minTrialsNum, m)
+    # rightVarRatioDF = twoMDimensionalFeature(CSP_passed_right_data, channelNum, minTrialsNum, m)
+    # tongueVarRatioDF = twoMDimensionalFeature(CSP_passed_tongue_data, channelNum, minTrialsNum, m)
+    # footVarRatioDF = twoMDimensionalFeature(CSP_passed_foot_data, channelNum, minTrialsNum, m)
+
+    # VarRatioDF = pd.concat([leftVarRatioDF, rightVarRatioDF, tongueVarRatioDF, footVarRatioDF], axis=0)
+    # labelDF = pd.DataFrame([i for i in range(4) for j in range(minTrialsNum)])
+
+    # VarRatioDF = VarRatioDF.reset_index()
+    # VarRatioDF = pd.concat([VarRatioDF, labelDF], axis=1).iloc[:, 1:]
+    # VarRatioDF.columns = [f"{n}" for n in range(m*2)] + ["target"]
+    # VarRatioDF
+    leftVarRatioDF = pd.DataFrame(DAMVFeature(CSP_passed_left_data))
+    rightVarRatioDF = pd.DataFrame(DAMVFeature(CSP_passed_right_data))
+    tongueVarRatioDF = pd.DataFrame(DAMVFeature(CSP_passed_tongue_data))
+    footVarRatioDF = pd.DataFrame(DAMVFeature(CSP_passed_foot_data))
 
     VarRatioDF = pd.concat([leftVarRatioDF, rightVarRatioDF, tongueVarRatioDF, footVarRatioDF], axis=0)
     labelDF = pd.DataFrame([i for i in range(4) for j in range(minTrialsNum)])
 
     VarRatioDF = VarRatioDF.reset_index()
     VarRatioDF = pd.concat([VarRatioDF, labelDF], axis=1).iloc[:, 1:]
-    VarRatioDF.columns = [f"{n}" for n in range(m*2)] + ["target"]
+    VarRatioDF.columns = [f"{n}" for n in range(25)] + ["target"]
     VarRatioDF
 
     x = VarRatioDF.drop(['target'], axis=1).values
@@ -107,8 +117,10 @@ def main(experimentIdx):
 
     # plotDF3D(data=VarRatioDF, num_of_classes=4)
 
-    # cross_validation("linear", VarRatioDF.drop(['label'], axis=1).values , labelDF)
-    # cross_validation("rbf", VarRatioDF.drop(['label'], axis=1).values , labelDF)
+    # linear_score.append(cross_validation("linear", VarRatioDF.drop(['target'], axis=1).values , labelDF))
+    # rbf_score.append(cross_validation("rbf", VarRatioDF.drop(['target'], axis=1).values , labelDF))
+    
+    
 
     # n_componunts = 3
     # PCA = PrincipalComponuntAnalysis(n_componunts=n_componunts, data=x)
