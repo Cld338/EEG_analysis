@@ -94,3 +94,5 @@ def cross_validation(kernel, data, label):
     scores = cross_val_score(svm_clf, data, label, cv = 5)
     print('교차검증 평균: ', scores.mean())
     return scores.mean()
+
+# =========================================================================
