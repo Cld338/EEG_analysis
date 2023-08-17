@@ -20,12 +20,10 @@ for i in range(len(trialsByClasses)):
     for j in trialsByClasses[i].keys():
         for k in range(len(trialsByClasses[i][j])):
             for l in range(len(trialsByClasses[i][j][k])):
-                trialsByClasses[i][j][k][l] = trialsByClasses[i][j][k][l][750:1500]
+                trialsByClasses[i][j][k][l] = trialsByClasses[i][j][k][l]
 
 channelNum = len(channels)
 m = len(trialsByClasses[0]["left"])
-
-
 
 linear_score = []
 rbf_score = []
@@ -149,7 +147,7 @@ def main(experimentIdx):
     LDA_DF_Scaled = pd.concat([pd.DataFrame(scaler.transform(LDA_DF.loc[:, :"axis3"])), labelDF], axis=1)
     LDA_DF_Scaled.columns = [f"axis{i+1}" for i in range(3)] + ["label"]
 
-    linear_score.append(cross_validation("linear", LDA_DF_Scaled.loc[:,:"axis3"], labelDF))
+    linear_score.append(    ("linear", LDA_DF_Scaled.loc[:,:"axis3"], labelDF))
     rbf_score.append(cross_validation("rbf", LDA_DF_Scaled.loc[:,:"axis3"], labelDF))
 
     # plotDF3D(data=LDA_DF, num_of_classes=4)
