@@ -19,7 +19,7 @@ from local_libs.dataHandler import *
 warnings.filterwarnings('ignore')
 
 experimentNum = 9
-Experiments = [MotorImageryDataset(parentDirectory(dir=currDir, separator="\\", n=1)+'/bcicompetitionIV2a/A0'+str(i+1)+'T.npz') for i in range(experimentNum)]
+Experiments = [MotorImageryDataset(os.getcwd()+'/src/bcicompetitionIV2a/A0'+str(i+1)+'T.npz') for i in range(experimentNum)]
 
 channels = list(range(25))
 samplingRate = 250 #Hz

@@ -56,7 +56,7 @@ def workingDirectory() -> str:
         currDir = os.path.dirname(os.path.abspath(__file__))
     return currDir
 
-def filesInFolder(dir :str, extention=False) -> list[str]:
+def filesInFolder(dir :str, extention=False) -> list:
     """_summary_
 
     Args:
