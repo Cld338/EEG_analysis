@@ -11,10 +11,10 @@ from sklearn.preprocessing import StandardScaler
 import pandas as pd
 import warnings
 
-from featureExtraction import *
-from dataAnalyzer import *
-from private_tool import *
-from dataHandler import *
+from local_libs.featureExtraction import *
+from local_libs.dataAnalyzer import *
+from local_libs.private_tool import *
+from local_libs.dataHandler import *
 
 warnings.filterwarnings('ignore')
 
