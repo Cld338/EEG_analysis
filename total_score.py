@@ -10,7 +10,7 @@ from local_libs.dataHandler import *
 warnings.filterwarnings('ignore')
     
 experimentNum = 9
-Experiments = [MotorImageryDataset(parentDirectory(dir=currDir, separator="\\", n=1)+'/bcicompetitionIV2a/A0'+str(i+1)+'T.npz') for i in range(experimentNum)]
+Experiments = [MotorImageryDataset(parentDirectory(dir=currDir, separator="\\", n=1)+'/src/bcicompetitionIV2a/A0'+str(i+1)+'T.npz') for i in range(experimentNum)]
 
 channels = list(range(25))
 samplingRate = 250 #Hz
@@ -49,10 +49,13 @@ def main(experimentIdx):
 
     # experimentIdx = 3
 
-    left_csp_filter = CSP_filter(np.array([i[:minTrialsNum] for i in bandpassedTrialsByClasses["left"][experimentIdx]]), np.array([j[:minTrialsNum] for i in ["right", "tongue", "foot"] for j in bandpassedTrialsByClasses[i][experimentIdx]]))
-    right_csp_filter = CSP_filter(np.array([i[:minTrialsNum] for i in bandpassedTrialsByClasses["right"][experimentIdx]]), np.array([j[:minTrialsNum] for i in ["left", "right", "tongue", "foot"] for j in bandpassedTrialsByClasses[i][experimentIdx]]))
-    tongue_csp_filter = CSP_filter(np.array([i[:minTrialsNum] for i in bandpassedTrialsByClasses["tongue"][experimentIdx]]), np.array([j[:minTrialsNum] for i in ["left", "tongue", "foot"] for j in bandpassedTrialsByClasses[i][experimentIdx]]))
-    foot_csp_filter = CSP_filter(np.array([i[:minTrialsNum] for i in bandpassedTrialsByClasses["foot"][experimentIdx]]), np.array([j[:minTrialsNum] for i in ["left", "right", "tongue"] for j in bandpassedTrialsByClasses[i][experimentIdx]]))
+    left_csp_filter = CSP_filter(np.array([i[:minTrialsNum] for experimentIdx in range(9) for i in bandpassedTrialsByClasses["left"][experimentIdx]]), np.array([j[:minTrialsNum] for i in ["right", "tongue", "foot"] for experimentIdx in range(9) for j in bandpassedTrialsByClasses[i][experimentIdx]]))
+    right_csp_filter = CSP_filter(np.array([i[:minTrialsNum] for experimentIdx in range(9) for i in bandpassedTrialsByClasses["right"][experimentIdx]]), np.array([j[:minTrialsNum] for i in ["left", "right", "tongue", "foot"] for experimentIdx in range(9) for j in bandpassedTrialsByClasses[i][experimentIdx]]))
+    tongue_csp_filter = CSP_filter(np.array([i[:minTrialsNum] for experimentIdx in range(9) for i in bandpassedTrialsByClasses["tongue"][experimentIdx]]), np.array([j[:minTrialsNum] for i in ["left", "tongue", "foot"] for experimentIdx in range(9) for j in bandpassedTrialsByClasses[i][experimentIdx]]))
+    foot_csp_filter = CSP_filter(np.array([i[:minTrialsNum] for experimentIdx in range(9) for i in bandpassedTrialsByClasses["foot"][experimentIdx]]), np.array([j[:minTrialsNum] for i in ["left", "right", "tongue"] for experimentIdx in range(9) for j in bandpassedTrialsByClasses[i][experimentIdx]]))
+    
+    csp_ls= [left_csp_filter, right_csp_filter, tongue_csp_filter, foot_csp_filter]
+    saveJson(f"{currDir}/csp_filter.json", list([list(i) for i in csp_ls]))
 
     bandpassedTrials = {i:[] for i in Experiments[0].mi_types.values()}
     for i in Experiments[0].mi_types.values():
@@ -65,7 +68,7 @@ def main(experimentIdx):
     CSP_passed_tongue_data = [j[:minTrialsNum].T@tongue_csp_filter for j in bandpassedTrialsByClasses["tongue"][experimentIdx]]
     CSP_passed_foot_data = [j[:minTrialsNum].T@foot_csp_filter for j in bandpassedTrialsByClasses["foot"][experimentIdx]]
 
-    len(CSP_passed_left_data)
+    
 
     # bandpassedTrialsByClasses["right"][0]["right"][0]
 
